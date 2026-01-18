@@ -2,6 +2,7 @@
 langchain
 langchain-core
 langchain-classic
+langchain_community
 
 # OpenAI Integration
 langchain-openai
@@ -25,3 +26,5 @@ python-dotenv
 # Machine Learning Utilities
 numpy
 scikit-learn
+
+chromadb
