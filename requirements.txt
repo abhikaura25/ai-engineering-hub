@@ -28,3 +28,6 @@ numpy
 scikit-learn
 
 chromadb
+pypdf
+beautifulsoup4 
+lxml
