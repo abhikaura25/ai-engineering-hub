@@ -3,6 +3,8 @@ langchain
 langchain-core
 langchain-classic
 langchain_community
+langchain-text-splitters
+
 
 # OpenAI Integration
 langchain-openai
