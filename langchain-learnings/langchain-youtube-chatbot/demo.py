@@ -5,6 +5,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,10 +30,6 @@ vector_store = Chroma.from_documents(
 
 retriever = vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 
-#result = retriever.invoke('What is computer vision')
-
-
-
 chat_model = ChatOpenAI()
 
 prompt = PromptTemplate(
@@ -47,15 +44,19 @@ prompt = PromptTemplate(
     input_variables = ['context', 'question']
 )
 
+def get_context(retrieved_docs):
+    return "\n\n".join(doc.page_content for doc in retrieved_docs)
 
-question = "is the topic of computer vision discussed in this video? if yes then what was discussed"
+parallel_chain = RunnableParallel({
+    'context': retriever | RunnableLambda(get_context),
+    'question': RunnablePassthrough()
+})
 
-retrieved_docs = retriever.invoke(question)
+parser = StrOutputParser()
 
-context_text = "\n\n".join(doc.page_content for doc in retrieved_docs)
+main_chain = parallel_chain | prompt | chat_model | parser
 
-chain = prompt | chat_model | StrOutputParser()
-
-result = chain.invoke({"context": context_text, "question": question})
+result = main_chain.invoke('Can you summarize the video')
 
 print(result)
+
