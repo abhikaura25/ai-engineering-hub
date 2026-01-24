@@ -4,6 +4,7 @@ langchain-core
 langchain-classic
 langchain_community
 langchain-text-splitters
+langchain-experimental
 
 
 # OpenAI Integration
@@ -36,3 +37,5 @@ lxml
 wikipedia
 tiktoken
 youtube-transcript-api
+duckduckgo-search
+requests
