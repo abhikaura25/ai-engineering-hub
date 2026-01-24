@@ -33,3 +33,5 @@ chromadb
 pypdf
 beautifulsoup4 
 lxml
+wikipedia
+tiktoken
