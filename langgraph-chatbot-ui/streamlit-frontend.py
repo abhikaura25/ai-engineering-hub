@@ -17,12 +17,17 @@ for message in st.session_state['chat_history']:
 
 if user_input:
     with st.chat_message("user"):
-        st.session_state['chat_history'].append({"role":"user","content":user_input})
+        st.session_state['chat_history'].append({"role": "user", "content": user_input})
         st.text(user_input)
-        config = {"configurable": {"thread_id": uuid}}    
-        result = chatbot.invoke({'messages': [  {"role":"user","content":user_input} ]}, config=config)
-        ai_message = result['messages'][-1].content
+
+    config = {"configurable": {"thread_id": uuid}}
 
     with st.chat_message("assistant"):
-        st.session_state['chat_history'].append({"role":"assistant","content":ai_message})
-        st.text(ai_message)
+        full_response = st.write_stream(
+            message_chunk.content for message_chunk,metadata in chatbot.stream(
+                {'messages': [{"role": "user", "content": user_input}]},
+                config=config,
+                stream_mode="messages"
+            ) 
+        )
+        st.session_state['chat_history'].append({"role": "assistant", "content": full_response})
