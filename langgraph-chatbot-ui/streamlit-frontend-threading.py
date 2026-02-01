@@ -41,10 +41,11 @@ st.sidebar.button("New Chat", on_click = reset_chat)
 st.sidebar.header("My Conversation")
 
 for thread in st.session_state['chat_threads'][::-1]:
-    if st.sidebar.button(thread):
+    result = get_chat_history(thread) # Preload chat history for the thread
+    button_label = result[0].content if result else "Start Conversation"
+    if st.sidebar.button(button_label, key=thread):
         st.session_state['thread_id'] = thread
-        messages = get_chat_history(thread)
-
+        messages = result
         temp_messages = []
         for message in messages:
             if isinstance(message, HumanMessage):
