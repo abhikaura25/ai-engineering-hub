@@ -5,6 +5,7 @@ langchain-classic
 langchain_community
 langchain-text-splitters
 langchain-experimental
+langgraph-checkpoint-sqlite
 
 # OpenAI Integration
 langchain-openai
